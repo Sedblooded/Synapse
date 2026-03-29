@@ -27,21 +27,21 @@ def create_app(test_config=None):
 
     # Initialize Firebase Admin SDK if not already initialized
     if not firebase_admin._apps:
-    import json
-    firebase_creds = os.environ.get('FIREBASE_CREDENTIALS')
-    if firebase_creds:
-        cred_dict = json.loads(firebase_creds)
-        cred = credentials.Certificate(cred_dict)
-        firebase_admin.initialize_app(cred)
-    else:
-        cred_path = os.path.join(os.path.dirname(app.root_path), 'firebase-service-account.json')
-        if os.path.exists(cred_path):
-            cred = credentials.Certificate(cred_path)
+        import json
+        firebase_creds = os.environ.get('FIREBASE_CREDENTIALS')
+        if firebase_creds:
+            cred_dict = json.loads(firebase_creds)
+            cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred)
         else:
-            print("WARNING: No Firebase credentials found!")
-
-    # Init DB
+            cred_path = os.path.join(os.path.dirname(app.root_path), 'firebase-service-account.json')
+            if os.path.exists(cred_path):
+                cred = credentials.Certificate(cred_path)
+                firebase_admin.initialize_app(cred)
+            else:
+                print("WARNING: No Firebase credentials found!")
+    
+        # Init DB
     init_app(app)
 
     # Health check route
